@@ -8,19 +8,20 @@ AllesGut also uses Django REST Framework (DRF) to build and maintain a robust AP
 
 
 ## Key Features
-**eCommerce App:** Buy, sell, and list items seamlessly.
-**Find My IP:** Fetches IP address and location details.
-**Load Balancing:** Utilizes Celery to handle task queues for performance optimization.
-**DRY Code Concept:** Promotes reusability and maintainable code.
-**RESTful API:** Built using Django REST Framework for scalable API management.
+
+- **eCommerce App:** Buy, sell, and list items seamlessly.
+- **Find My IP:** Fetches IP address and location details.
+- **Load Balancing:** Utilizes Celery to handle task queues for performance optimization.
+- **DRY Code Concept:** Promotes reusability and maintainable code.
+- **RESTful API:** Built using Django REST Framework for scalable API management.
 
 
 ## Tech Stack
-**Django:** Server-side frontend framework.
-**Celery:** Load balancing and task queue handling.
-**Redis:** Broker for Celery tasks.
-**Django REST Framework:** API development and management.
-**PostgreSQL:** Database for structured data.
+- **Django:** Server-side frontend framework.
+- **Celery:** Load balancing and task queue handling.
+- **Redis:** Broker for Celery tasks.
+- **Django REST Framework:** API development and management.
+- **PostgreSQL:** Database for structured data.
 
 
 
