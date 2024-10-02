@@ -1,0 +1,274 @@
+<nav class="sidebar sidebar-offcanvas col-2" id="sidebar">
+    <ul class="nav flex-column">
+      <!-- Farmers Section -->
+      {% if 'Accounts Team' in request.session.user_roles or 'Finance Manager' in request.session.user_roles or 'Super Admin' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="farmersMenu">
+            <div style="width:35px">
+              <i class="fa-solid fa-person-digging fa-lg"></i>
+            </div>
+            <span class="menu-title">Farmers</span>
+          </a>
+          <ul class="nav flex-column sub-menu" style="display: none">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'farmer' %}">
+                <span class="menu-title">Manage Farmers</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <span class="menu-title">Manage Inquiry</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+  
+            <!-- Customers Section -->
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="customersMenu">
+            <div style="width:35px">
+              <i class="fa-solid fa-users"></i>
+            </div>
+            <span class="menu-title">Customers</span>
+          </a>
+          <ul class="nav flex-column sub-menu" style="display: none">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'customer_list' %}">
+                <span class="menu-title">Manage Customers</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <span class="menu-title">Manage Orders</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      {% endif %}
+  
+      <!-- Inventory Section -->
+      {% if 'Operations Manager' in request.session.user_roles or 'Accounts Team' in request.session.user_roles or 'Finance Manager' in request.session.user_roles or 'Super Admin' in request.session.user_roles or 'Operations Team' in request.session.user_roles%}
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="inventoryMenu">
+            <div style="width:35px">
+              <i class="fa-solid fa-house-chimney-window"></i>
+            </div>
+            <span class="menu-title">Inventory</span>
+          </a>
+          <ul class="nav flex-column sub-menu" style="display: none">
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <span class="menu-title">Incoming</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <span class="menu-title">Outgoing</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="">
+                <span class="menu-title">Warehousing</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      {% endif %}
+  
+      <!-- Accounts Section -->
+      {% if 'Accounts Team' in request.session.user_roles or 'Finance Manager' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-receipt"></i>
+            </div>
+            <span class="menu-title">Incoming Coffee Details</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-sack-dollar"></i>
+            </div>
+            <span class="menu-title">Pricing</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fas fa-file-invoice"></i>
+            </div>
+            <span class="menu-title">Invoicing</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Finance Manager Section -->
+      {% if 'Finance Manager' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-file"></i>
+            </div>
+            <span class="menu-title">Quality Reports</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+            <span class="menu-title">Purchase Orders</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-truck"></i>
+            </div>
+            <span class="menu-title">Delivery Orders</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Quality Manager Section -->
+      {% if 'Quality Manager' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-brands fa-wpforms"></i>
+            </div>
+            <span class="menu-title">Form J</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-file"></i>
+            </div>
+            <span class="menu-title">Quality Report</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Admin Section -->
+      {% if 'Super Admin' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="adminMenu">
+            <div style="width:35px">
+              <i class="fa-solid fa-user-tie"></i>
+            </div>
+            <span class="menu-title">Admin</span>
+          </a>
+          <ul class="nav flex-column sub-menu" style="display: none">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'user_list' %}">
+                <span class="menu-title">Users</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      {% endif %}
+  
+      <!-- Driver Section -->
+      {% if 'Driver' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-brands fa-wpforms"></i>
+            </div>
+            <span class="menu-title">Form J</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Quality Team Section -->
+      {% if 'Quality Team' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-brands fa-wpforms"></i>
+            </div>
+            <span class="menu-title">Arrival Quality Report</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Weigh Man Section -->
+      {% if 'Weigh Man' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-brands fa-wpforms"></i>
+            </div>
+            <span class="menu-title">Arriving Load Details</span>
+          </a>
+        </li>
+      {% endif %}
+  
+      <!-- Operations Manager Section -->
+      {% if 'Operations Team' in request.session.user_roles %}
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-mug-hot"></i>
+            </div>
+            <span class="menu-title">Coffee Processing</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-truck-fast"></i>
+            </div>
+            <span class="menu-title">Logistics</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <div style="width:35px">
+              <i class="fa-solid fa-flask-vial"></i>
+            </div>
+            <span class="menu-title">Labour</span>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+      // Select all menu items with a submenu
+      const menuItems = document.querySelectorAll('[data-toggle="submenu"]');
+      
+      menuItems.forEach(function (menuItem) {
+          menuItem.addEventListener('click', function (e) {
+              e.preventDefault();
+  
+              // Toggle the "active" class on the clicked menu item
+              const parentItem = this.parentElement;
+              const subMenu = parentItem.querySelector('.sub-menu');
+  
+              // Remove "active" class from all other menu items
+              document.querySelectorAll('.nav-item').forEach(function (item) {
+                  if (item !== parentItem) {
+                      item.classList.remove('active');
+                      const otherSubMenu = item.querySelector('.sub-menu');
+                      if (otherSubMenu) {
+                          otherSubMenu.style.display = 'none';
+                      }
+                  }
+              });
+  
+              // Toggle visibility of the submenu
+              if (subMenu.style.display === 'block') {
+                  subMenu.style.display = 'none';
+                  parentItem.classList.remove('active');
+              } else {
+                  subMenu.style.display = 'block';
+                  parentItem.classList.add('active');
+              }
+          });
+      });
+  });
+  
+    </script>
+  </nav>
