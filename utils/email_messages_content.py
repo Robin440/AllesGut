@@ -1,6 +1,10 @@
+
+
 # from core.settings.base import UI_DOMAIN_URL
 from core.settings import EMAIL_SENDER
-UI_DOMAIN_URL='https://e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free.app/api/verify/'
+from django.conf import settings
+
+UI_DOMAIN_URL=f'{settings.NGROK_URL}/api/verify/'
 
 
 DEFAULT_NOTIFICATION_FROM_EMAIL = EMAIL_SENDER
@@ -21,27 +25,38 @@ def email_content(identifier, data):
     # Email content with identifiers.
     mail_content = {
         "registration": {
-            "subject": f"Verification code to signup: {data.get('verification_code')} | AllesGUT",
-            "from": [
-                DEFAULT_NOTIFICATION_FROM_EMAIL,
-            ],
-            "roles": ["ws_owner", "ws_admin", "ws_member", "ws_billing_manager"],
-            "body": {
-                "title": "Activate your account.",
-                "paragraph_1": f"Just one more step away to access your AllesGUT account. Click the button below and you will be on your way. here is your otp {data.get('verification_code')}",
-                "cta_button": {
-                    "text": "Verify Your Email",
-                    "link": "{domain}?identifier=registration&verification_token={token}&uuid={uuid}".format(
-                        domain=UI_DOMAIN_URL,
-                        token=data.get("token"),
-                        uuid=data.get("uuid"),
-                    ),
-                },
-                "verification_code": f"{data.get('verification_code')}",
-                "paragraph_2": "",
-            },
-            "required_fields": ["token", "uuid", "verification_code"],
+    "subject": f"Verification code to signup: {data.get('verification_code')} | AllesGUT",
+    "from": [
+        DEFAULT_NOTIFICATION_FROM_EMAIL,
+    ],
+    "body": {
+        "title": "Activate Your Account",
+        "paragraph_1": (
+            f"Hi {data.get('name')},\n\n"
+            "Just one more step away to access your AllesGUT account. "
+            "Click the button below to verify your email and complete the registration process. "
+            "Here is your OTP: {data.get('verification_code')}"
+        ),
+        "cta_button": {
+            "text": "Verify Your Email",
+            "link": "{domain}?identifier=registration&verification_token={token}&uuid={uuid}".format(
+                domain=UI_DOMAIN_URL,
+                token=data.get("token"),
+                uuid=data.get("uuid"),
+            ),
         },
+        "verification_code": {
+            "code": f"{data.get('verification_code')}"
+        },
+        "paragraph_2": (
+            "This verification code is valid for the next 15 minutes. "
+            "If you did not initiate this request, please ignore this email.\n\n"
+            "Thank you for choosing AllesGUT."
+        ),
+    },
+    "required_fields": ["token", "uuid", "verification_code"],
+},
+
         "change_email": {
             "subject": f"Verification code to change email: {data.get('verification_code')} | VegaStack",
             "from": [
@@ -70,19 +85,32 @@ def email_content(identifier, data):
                 "paragraph_2": "<paragraph 2>",
             },
         },
-        "delete_workspace": {
-            "subject": f"Verification code to delete workspace: {data.get('verification_code')} | VegaStack",
-            "from": [
-                DEFAULT_NOTIFICATION_FROM_EMAIL,
-            ],
-            "roles": ["ws_owner", "ws_admin", "ws_member", "ws_billing_manager"],
-            "body": {
-                "title": "Email to delete workspace.",
-                "paragraph_1": "<paragraph 1>",
-                "cta_button": {"text": "Link", "link": "<LINK>"},
-                "verification_code": {"code": f"{data.get('verification_code')}"},
-                "paragraph_2": "<paragraph 2>",
-            },
+        "resend_verification": {
+    "subject": f"Verification code: {data.get('verification_code')} | AllesGUT",
+    "from": [
+        DEFAULT_NOTIFICATION_FROM_EMAIL,
+    ],
+    "body": {
+        "title": "Verify your account",
+        "paragraph_1": (
+            f"Hi {data.get('name')},\n\n"
+            "We noticed that you requested to resend the verification code for your account registration. "
+            "Please use the code below to verify your email and complete the registration process."
+        ),
+        "cta_button": {
+            "text": "Verify Now",
+            "link": "<LINK>"  # Add the actual link for verification here
+        },
+        "verification_code": {
+            "code": f"{data.get('verification_code')}"
+        },
+        "paragraph_2": (
+            "This verification code is valid for the next 15 minutes. If you didn't request this, please ignore this email.\n\n"
+            "Thank you for choosing AllesGUT."
+        ),
+    },
+
+
         },
         "change_ownership": {
             "subject": f"Verification code to change ownership: {data.get('verification_code')} | VegaStack",

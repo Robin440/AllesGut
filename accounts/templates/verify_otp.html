@@ -34,9 +34,9 @@
                         {% endif %}
 
                         {% if mail %}
-                        <form method="POST" action="{% url 'otp_verify' %}">
+                        <form method="POST" action="{% url 'resend_verification' %}">
                             {% else %}
-                            <form method="POST" action="{% url 'resend_verification' %}">
+                            <form method="POST" action="{% url 'otp_verify' %}">
                                 {% endif %}
                             {% csrf_token %}
                             {% if mail %}
@@ -70,7 +70,7 @@
                         </form>
                         {% if not mail %}
                         <div class="row mb-4 px-3">
-                            <small class="font-weight-bold">Didn't receive an OTP? <a href="{% url 'user_register' %}" class="text-danger">Resend</a></small>
+                            <small class="font-weight-bold">Didn't receive an OTP? <a href="{% url 'resend_verification' %}" class="text-danger">Resend</a></small>
                         </div>
                         {% endif %}
                     </div>
@@ -97,6 +97,17 @@
             </div>
             <div class="toast-body">
                 {{ error }}
+            </div>
+        </div>
+        {% endif %}
+        {% if success %}
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="position: absolute; top: 20px; right: 20px;">
+            <div class="toast-header">
+                <strong class="me-auto">Success</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {{ success }}
             </div>
         </div>
         {% endif %}

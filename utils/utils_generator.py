@@ -1,8 +1,15 @@
+GREEN_BOLD = "\033[1;32m"
+YELLOW_BOLD = "\033[1;33m"
+RESET = "\033[0m"
+
+print(f"{YELLOW_BOLD}LOADING GENERATORS MODULE FROM 'utils_generator.py'{RESET}")
+
 
 
 import random
 import string
 import uuid
+
 
 def generate_random_string():
     """
@@ -44,12 +51,17 @@ def generate_random_string():
 
 
 
+
 def generate_otp():
     """
-    Generate a random 6-digit OTP.
+    Generate a random 6-digit OTP that does not start with zero.
 
     :return: A string representing the randomly generated OTP.
     """
-    otp = ''.join(random.choices('0123456789', k=6))
+    first_digit = random.choice('123456789')  # First digit cannot be 0
+    remaining_digits = ''.join(random.choices('0123456789', k=5))  # Remaining 5 digits can be 0-9
+    otp = first_digit + remaining_digits
     return otp
 
+
+print(f"{GREEN_BOLD}****************************** generator module loaded successfully ******************************{RESET}")

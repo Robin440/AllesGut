@@ -1,3 +1,13 @@
+# ANSI escape codes for green text and bold
+GREEN_BOLD = "\033[1;32m"
+YELLOW_BOLD = "\033[1;33m"
+RESET = "\033[0m"
+
+print(f"{YELLOW_BOLD}LOADING EMAIL MODULE FROM 'email.py'{RESET}")
+
+
+
+
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 
@@ -8,7 +18,7 @@ import logging
 
 import importlib
 
-print("**************** email package ******************************")
+
 
 # def get_template_data_func():
 #     """This function returns the template data function"""
@@ -123,3 +133,5 @@ def send_email(email_sender, content_data):
         )
         logging.error(f"Error while sending email: {error}")
         return False
+
+print(f"{GREEN_BOLD}****************************** email module loaded successfully ******************************{RESET}")

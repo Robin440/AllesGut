@@ -4,9 +4,9 @@ from member.models import Member
 
 class MyIPAdmin(admin.ModelAdmin):
     # Display user details (email and first name) and other IP-related fields
-    list_display = ('uuid', 'member_user_first_name', 'member_user_email', 'country', 'city', 'region')
-    search_fields = ('uuid', 'member__user__first_name', 'member__user__email', 'country', 'city', 'region')  # Search via related fields
-    list_filter = ('country', 'city', 'region')
+    list_display = ('uuid', 'member_user_first_name', 'member_user_email', 'country_name', 'city', 'region')
+    search_fields = ('uuid', 'member__user__first_name', 'member__user__email', 'country_name', 'city', 'region')  # Search via related fields
+    list_filter = ('country_name', 'city', 'region')
     ordering = ('uuid',)
     readonly_fields = ['uuid']
 

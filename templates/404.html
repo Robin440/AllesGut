@@ -1,17 +1,121 @@
-<!-- templates/404.html -->
+<!-- templates/500.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found</title>
+    <title>Server Error</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1d1d1d;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #2b2b2b;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1.5s ease-in-out, moveUp 2s ease-in-out;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f44336;
+            animation: pulse 2s infinite;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #ddd;
+            opacity: 0.9;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background-color: #4caf50;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: inline-block;
+            animation: fadeInUp 2s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+            transform: translateY(-5px);
+        }
+
+        .note {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #f44336;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 30px;
+            }
+
+            .note {
+                font-size: 12px;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes moveUp {
+            0% { transform: translateY(50px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Oops! Page Not Found (404)</h1>
-        <p>Sorry, the page you are looking for does not exist.</p>
-        <a href="{% url 'home' %}" class="btn">Go Back to Home</a>
+        <h1>Oops! 404 Error</h1>
+        <p>Sorry,You have entered wrong end point or invalid endpoint. Please contact the administrator or try again with valid endpoint.</p>
+        <a href="{% url 'user_logout' %}" class="btn">Go Back to Home</a>
+        <div class="note">
+            Note: Your account will be logged out when you hit the Go Back button for safety.
+        </div>
     </div>
 </body>
 </html>

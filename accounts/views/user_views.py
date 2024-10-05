@@ -238,6 +238,9 @@ class RegisterAPIView(APIView):
             return render(request,'register.html',context)
         print('--------------------12----------------------------')
         request.session['email'] = email
+        request.session.save()  # Ensure session data is saved
+        request.session.modified = True  # Ensure that session changes are saved
+
         if not request.session.get('email'):
             context['error']='Error occured while storing email in session.'
             return render(request,'register.html',context)
@@ -288,10 +291,14 @@ class RegisterAPIView(APIView):
             'verification_code':otp,
             'token':token,
             'identifier':identifier,
-            'uuid':member.uuid
+            'uuid':member.uuid,
+            'name':name
 
 
         }
+
+        print("Session data:", request.session.items())
+
         
         email_verification_code = verify_user(identifier=identifier,data=data)
         if email_verification_code is False:
@@ -316,11 +323,14 @@ class OTPVerifyAPIView(APIView):
         """_summary_
         """
         context={}
+        print("Session data:", request.session.items())
         return render(request,'verify_otp.html',context)
 
     def post(self,request,*args,**kwargs):
         """_summary_
         """
+        context={}
+        print("Session data:", request.session.items())
         try:
             email = request.session.get('email')
         except Exception as e:
@@ -344,8 +354,10 @@ class OTPVerifyAPIView(APIView):
         
         
         otp =  user.verification.otp
+        print(f"input = {otp}-----{input_otp}")
+        print(f"input = {type(str(otp))}-----{type(input_otp)}")
 
-        if otp != input_otp:
+        if str(otp) != str(input_otp):
             context['error']='Incorrect OTP'
             return render(request,'verify_otp.html',context)
         user.is_active = True
@@ -437,17 +449,21 @@ class ResendVerificationAPIView(APIView):
         return render(request,'verify_otp.html',context)
     def post(self,request):
         context={}
-        email = request.POST.get('mail')
+        email = request.POST.get('email')
+
         if not email:
             context['mail']='Required'
             context['error']='Email is missing.'
-            return render(request,'verify_otp.html',context)
+            return render(request,'verify_otp.html',context)    
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             context['error']='User does not exist with user and enter a correct mail id associated with user'
             context['mail']='Required'
             return render(request,'verify_otp.html',context)
+        verification_identifier = 'resend_verification'
+        otp = generate_otp()
+        token = generate_random_string()
 
         try:
             verification = VerificationToken.objects.create(name=verification_identifier,otp = otp,token = token)
@@ -461,15 +477,19 @@ class ResendVerificationAPIView(APIView):
             'email':email,
             'verification_code':otp,
             'token':token,
-            'identifier':identifier,
-            'uuid':member.uuid
+            'identifier':verification_identifier,
+            'uuid':member.uuid,
+            'name':user.first_name
 
 
         }
         
-        email_verification_code = verify_user(identifier=identifier,data=data)
+        email_verification_code = verify_user(identifier=verification_identifier,data=data)
         if email_verification_code is False:
-            print()
+            context['error']='Failed to send verification code'
+            return render(request,'verify_otp.html',context)
+        context['success']="Verification send successfully to your email account."
+        return render(request,'verify_otp.html',context)
           
 
 

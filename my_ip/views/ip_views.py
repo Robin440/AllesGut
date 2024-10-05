@@ -14,6 +14,10 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 
 
+# Import Serializers
+from my_ip.serializers import MyIPCreateSerializers,MyIPListSerializers
+
+
 from django.contrib.gis.geoip2 import GeoIP2
 
 class IPAddressView(APIView):
@@ -28,8 +32,7 @@ class IPAddressView(APIView):
         """
         Handle POST request
         """
-
-        print(f" geoip2 = {GeoIP2}")
+        context = {}
         try:
             x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
             if x_forwarded_for:
@@ -39,7 +42,21 @@ class IPAddressView(APIView):
             g = GeoIP2()
             try:
                 geo_data = g.city(ip)
-                return render(request, "my_ip.html", {"response": geo_data})
+                print(f"geo_data -  {geo_data}")
+                try:
+                    context = geo_data
+                    member = get_member(request.user)
+                    context['member'] = member.uuid
+                    context['ip'] = ip
+                    serializer = MyIPCreateSerializers(data = context)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return render(request,"my_ip.html",context)
+                    context['error']=str(serializer.errors)
+                    return render(request,'my_ip.html',context)
+                except Exception as e:
+                    print(f'error -  {e}')
+                return render(request, "my_ip.html", context)
             except Exception as e:
                 return render(request, "my_ip.html", {"response": str(e)})
         except Exception as e:

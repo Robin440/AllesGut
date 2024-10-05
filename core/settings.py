@@ -1,3 +1,10 @@
+
+GREEN_BOLD = "\033[1;32m"
+YELLOW_BOLD = "\033[1;33m"
+RESET = "\033[0m"
+print(f"{YELLOW_BOLD}LOADING SETTINGS 'SETTINGS.py'{RESET}")
+
+
 """
 Django settings for core project.
 
@@ -19,14 +26,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file
 load_dotenv()  # This loads the variables from .env into the environment
 
+NGROK_URL = os.getenv('NGROK_URL')
+
+
+NGROK_ALLOWED_DOMAIN = NGROK_URL.replace("https://", "")
+
+
+
 
 # Load SECRET_KEY and provide a fallback
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True    
+DEBUG = True 
 
-ALLOWED_HOSTS = ['e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free.app','127.0.0.1','localhost','e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free']
+ALLOWED_HOSTS = [NGROK_ALLOWED_DOMAIN,'127.0.0.1','localhost','9482-2401-4900-1f28-556c-848e-83b7-7660-c71e.ngrok-free']
 
 
 # Application definition
@@ -53,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.Custom404Middlewares.Custom404Middleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -158,9 +173,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8001',
     'http://127.0.0.1:8001',
     'https://yourdomain.com',
-    'https://4648-2401-4900-1cc4-f578-15c1-c8a9-f104-f51c.ngrok-free.app',
-    'https://4648-2401-4900-1cc4-f578-15c1-c8a9-f104-f51c.ngrok-free.app/login/',
-    'https://e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free.app'
+    NGROK_URL
 ]
 
 
@@ -176,3 +189,19 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_SENDER=EMAIL_HOST_USER
+
+
+SESSION_COOKIE_AGE = 1200  # Session will expire after 20 minutes (adjust as needed)
+SESSION_SAVE_EVERY_REQUEST = True  # Optional: Save session on every request
+# SESSION_COOKIE_SECURE = True  # Optional: Secure session cookie
+SESSION_COOKIE_SAMESITE = "Strict"  # Optional: Prevent CSRF attacks
+SESSION_COOKIE_HTTPONLY = False # Optional: Prevent JavaScript access to session cookie
+# settings.py
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+AUTH_USER_MODEL = 'accounts.User'
+
+
+
+
+print(f"{GREEN_BOLD}****************************** SETTINGS LOADED SUCCESSFULLY ******************************{RESET}")
+

@@ -1,3 +1,10 @@
+GREEN_BOLD = "\033[1;32m"
+YELLOW_BOLD = "\033[1;33m"
+RESET = "\033[0m"
+
+print(f"{YELLOW_BOLD}LOADING VALIDATORS MODULE FROM 'validatiors.py'{RESET}")
+
+
 
 import random
 import string
@@ -109,4 +116,4 @@ def verify_user(identifier,data):
 
     
 
-
+print(f"{GREEN_BOLD}****************************** validators module loaded successfully ******************************{RESET}")
