@@ -26,7 +26,9 @@ urlpatterns = [
     path('api/resend_verification/',user_views.ResendVerificationAPIView.as_view(),name='resend_verification'),
 
     #  My IP urls
-    path('api/my_ip/',ip_views.IPAddressView.as_view(),name='my_ip'),
+    path('api/ip_home/',ip_views.IPHomeView.as_view(),name='ip_home'),
+    path('api/ip_history/',ip_views.IPHistoryAPIView.as_view(),name='ip_history'),
+    path('api/my_ip/',ip_views.FindMyIPAPIView.as_view(),name='my_ip')
 
 
 

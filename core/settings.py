@@ -40,7 +40,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'fallback_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True 
 
-ALLOWED_HOSTS = [NGROK_ALLOWED_DOMAIN,'127.0.0.1','localhost','9482-2401-4900-1f28-556c-848e-83b7-7660-c71e.ngrok-free']
+ALLOWED_HOSTS = [NGROK_ALLOWED_DOMAIN,'127.0.0.1','localhost','c536-2401-4900-1cbc-ad31-ecc6-2890-8fb-5a17.ngrok-free.app']
 
 
 # Application definition
@@ -71,6 +71,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'core.urls'
+alles_templates_dir = os.path.join(BASE_DIR, 'templates')
+subdirs = [x[0] for x in os.walk(alles_templates_dir)]
 
 TEMPLATES = [
     {
@@ -81,7 +83,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'api', 'templates'),
             os.path.join(BASE_DIR,'my_ip','templates')  # Add any other apps with templates
             # Add more app directories as needed
-        ],
+        ] + subdirs,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -173,6 +175,7 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8001',
     'http://127.0.0.1:8001',
     'https://yourdomain.com',
+    'https://c536-2401-4900-1cbc-ad31-ecc6-2890-8fb-5a17.ngrok-free.app',
     NGROK_URL
 ]
 
