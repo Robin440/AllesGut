@@ -221,11 +221,6 @@ class RegisterAPIView(APIView):
                 "Password is not valid ,must include 8 characters , uppercase , lowercase and number."
             )
             return render(request, "register.html", context)
-
-        # if not check_password_for_spaces(password):
-        #     context['error']="Password cannot contain spaces"
-        #     return render(request,'register.html',context)
-
         if not name:
             context["error"] = "Name cannot be empty"
             return render(request, "register.html", context)
@@ -338,11 +333,19 @@ class OTPVerifyAPIView(APIView):
     def post(self, request, *args, **kwargs):
         """_summary_"""
         context = {}
-        # print("Session data:", request.session.items())
+
         try:
             email = request.session.get("email")
+
         except Exception as e:
             context["error"] = f"Unable to retrive mail from session : {str(e)}"
+        if not email:
+            context["error"] = "Unable to retrive mail from session"
+            return render(request, "verify_otp.html", context)
+        try:
+            identifier = request.session.get("identifier")
+        except Exception as e:
+            identifier = None
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -367,6 +370,12 @@ class OTPVerifyAPIView(APIView):
         if str(otp) != str(input_otp):
             context["error"] = "Incorrect OTP"
             return render(request, "verify_otp.html", context)
+        if identifier and identifier == "forgot_password":
+            context["success"] = "OTP verified successfully. Please set a new password."
+            del request.session["email"]
+            del request.session["identifier"]
+            return render(request, "login.html", context)
+
         user.is_active = True
         member.is_active = True
         user.save()
@@ -461,6 +470,7 @@ class ResendVerificationAPIView(APIView):
     def post(self, request):
         context = {}
         email = request.POST.get("email")
+        forgot_password = request.POST.get("forgot_password")
 
         if not email:
             context["mail"] = "Required"
@@ -475,6 +485,12 @@ class ResendVerificationAPIView(APIView):
             context["mail"] = "Required"
             return render(request, "verify_otp.html", context)
         verification_identifier = "resend_verification"
+        if forgot_password:
+            verification_identifier = "forgot_password"
+            request.session["email"] = email
+            request.session["verification_identifier"] = verification_identifier
+            request.session.save()  # Ensure session data is saved
+            request.session.modified = True  # Ensure that session changes are saved
         otp = generate_otp()
         token = generate_random_string()
 
@@ -482,6 +498,8 @@ class ResendVerificationAPIView(APIView):
             verification = VerificationToken.objects.create(
                 name=verification_identifier, otp=otp, token=token
             )
+            user.verification = verification
+            user.save()
         except Exception as e:
             context["error"] = f"Error creating verification token: {str(e)}"
             return render(request, "register.html", context)
@@ -504,4 +522,26 @@ class ResendVerificationAPIView(APIView):
             context["error"] = "Failed to send verification code"
             return render(request, "verify_otp.html", context)
         context["success"] = "Verification send successfully to your email account."
+        return render(request, "verify_otp.html", context)
+
+
+class ForgotPasswordAPIView(APIView):
+    """
+    API endpoint to send a password reset link to the user's email.
+
+    Args:
+        APIView (_type_): _description_
+    """
+
+    def get(self, request, *args, **kwargs):
+        """_summary_
+
+        Args:
+            request (_type_): _description_
+        Description:
+        This function is used to send a password reset link to the user's email.
+        """
+        context = {}
+        context["mail"] = "required"
+        context["forgot_password"] = "required"
         return render(request, "verify_otp.html", context)

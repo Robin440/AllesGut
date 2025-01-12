@@ -1,10 +1,8 @@
-
-
 # from core.settings.base import UI_DOMAIN_URL
 from core.settings import EMAIL_SENDER
 from django.conf import settings
 
-UI_DOMAIN_URL=f'{settings.NGROK_URL}/api/verify/'
+UI_DOMAIN_URL = f"{settings.NGROK_URL}/api/verify/"
 
 
 DEFAULT_NOTIFICATION_FROM_EMAIL = EMAIL_SENDER
@@ -25,38 +23,64 @@ def email_content(identifier, data):
     # Email content with identifiers.
     mail_content = {
         "registration": {
-    "subject": f"Verification code to signup: {data.get('verification_code')} | AllesGUT",
-    "from": [
-        DEFAULT_NOTIFICATION_FROM_EMAIL,
-    ],
-    "body": {
-        "title": "Activate Your Account",
-        "paragraph_1": (
-            f"Hi {data.get('name')},\n\n"
-            "Just one more step away to access your AllesGUT account. "
-            "Click the button below to verify your email and complete the registration process. "
-            "Here is your OTP: {data.get('verification_code')}"
-        ),
-        "cta_button": {
-            "text": "Verify Your Email",
-            "link": "{domain}?identifier=registration&verification_token={token}&uuid={uuid}".format(
-                domain=UI_DOMAIN_URL,
-                token=data.get("token"),
-                uuid=data.get("uuid"),
-            ),
+            "subject": f"Verification code to signup: {data.get('verification_code')} | AllesGUT",
+            "from": [
+                DEFAULT_NOTIFICATION_FROM_EMAIL,
+            ],
+            "body": {
+                "title": "Activate Your Account",
+                "paragraph_1": (
+                    f"Hi {data.get('name')},\n\n"
+                    "Just one more step away to access your AllesGUT account. "
+                    "Click the button below to verify your email and complete the registration process. "
+                    "Here is your OTP: {data.get('verification_code')}"
+                ),
+                "cta_button": {
+                    "text": "Verify Your Email",
+                    "link": "{domain}?identifier=registration&verification_token={token}&uuid={uuid}".format(
+                        domain=UI_DOMAIN_URL,
+                        token=data.get("token"),
+                        uuid=data.get("uuid"),
+                    ),
+                },
+                "verification_code": {"code": f"{data.get('verification_code')}"},
+                "paragraph_2": (
+                    "This verification code is valid for the next 15 minutes. "
+                    "If you did not initiate this request, please ignore this email.\n\n"
+                    "Thank you for choosing AllesGUT."
+                ),
+            },
+            "required_fields": ["token", "uuid", "verification_code"],
         },
-        "verification_code": {
-            "code": f"{data.get('verification_code')}"
+        "forgot_password": {
+            "subject": f"Reset Your Password: Verification Code {data.get('verification_code')} | AllesGUT",
+            "from": [
+                DEFAULT_NOTIFICATION_FROM_EMAIL,
+            ],
+            "body": {
+                "title": "Forgot Password Assistance",
+                "paragraph_1": (
+                    f"Hello {data.get('name')},\n\n"
+                    "We received a request to reset the password for your AllesGUT account. "
+                    "To proceed, please use the verification code below or click the button to verify your email and continue with the password reset process."
+                ),
+                "verification_code": {"code": f"{data.get('verification_code')}"},
+                "cta_button": {
+                    "text": "Verify Your Email",
+                    "link": "{domain}?identifier=password_reset&verification_token={token}&uuid={uuid}".format(
+                        domain=UI_DOMAIN_URL,
+                        token=data.get("token"),
+                        uuid=data.get("uuid"),
+                    ),
+                },
+                "paragraph_2": (
+                    "This verification code will expire in 15 minutes. "
+                    "If you did not request a password reset, you can safely ignore this email.\n\n"
+                    "Thank you for trusting AllesGUT."
+                ),
+            },
+            "required_fields": ["token", "uuid", "verification_code"],
         },
-        "paragraph_2": (
-            "This verification code is valid for the next 15 minutes. "
-            "If you did not initiate this request, please ignore this email.\n\n"
-            "Thank you for choosing AllesGUT."
-        ),
-    },
-    "required_fields": ["token", "uuid", "verification_code"],
-},
-
         "change_email": {
             "subject": f"Verification code to change email: {data.get('verification_code')} | VegaStack",
             "from": [
@@ -86,31 +110,27 @@ def email_content(identifier, data):
             },
         },
         "resend_verification": {
-    "subject": f"Verification code: {data.get('verification_code')} | AllesGUT",
-    "from": [
-        DEFAULT_NOTIFICATION_FROM_EMAIL,
-    ],
-    "body": {
-        "title": "Verify your account",
-        "paragraph_1": (
-            f"Hi {data.get('name')},\n\n"
-            "We noticed that you requested to resend the verification code for your account registration. "
-            "Please use the code below to verify your email and complete the registration process."
-        ),
-        "cta_button": {
-            "text": "Verify Now",
-            "link": "<LINK>"  # Add the actual link for verification here
-        },
-        "verification_code": {
-            "code": f"{data.get('verification_code')}"
-        },
-        "paragraph_2": (
-            "This verification code is valid for the next 15 minutes. If you didn't request this, please ignore this email.\n\n"
-            "Thank you for choosing AllesGUT."
-        ),
-    },
-
-
+            "subject": f"Verification code: {data.get('verification_code')} | AllesGUT",
+            "from": [
+                DEFAULT_NOTIFICATION_FROM_EMAIL,
+            ],
+            "body": {
+                "title": "Verify your account",
+                "paragraph_1": (
+                    f"Hi {data.get('name')},\n\n"
+                    "We noticed that you requested to resend the verification code for your account registration. "
+                    "Please use the code below to verify your email and complete the registration process."
+                ),
+                "cta_button": {
+                    "text": "Verify Now",
+                    "link": "<LINK>",  # Add the actual link for verification here
+                },
+                "verification_code": {"code": f"{data.get('verification_code')}"},
+                "paragraph_2": (
+                    "This verification code is valid for the next 15 minutes. If you didn't request this, please ignore this email.\n\n"
+                    "Thank you for choosing AllesGUT."
+                ),
+            },
         },
         "change_ownership": {
             "subject": f"Verification code to change ownership: {data.get('verification_code')} | VegaStack",
@@ -173,7 +193,9 @@ def email_content(identifier, data):
     try:
         content = mail_content[identifier]
     except Exception as exc:
-        raise ValueError(f"please add this {identifier} in email content. exc: {exc}") from exc
+        raise ValueError(
+            f"please add this {identifier} in email content. exc: {exc}"
+        ) from exc
 
     # Validation for required fields.
     # Here we check the verification code , uuid and token from data.

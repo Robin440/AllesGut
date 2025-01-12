@@ -54,6 +54,12 @@
                                 <input class="mb-4" type="text" name="otp" placeholder="Enter your OTP" required>
                             </div>
                             {% endif %}
+                            {% if forgot_password %}
+                        <div class="row px-3">
+                            <input type="hidden" name="forgot_password" value="True">
+                        </div>
+                        {% endif %}
+                        
 
                             {% if mail %}
 
@@ -73,6 +79,7 @@
                             <small class="font-weight-bold">Didn't receive an OTP? <a href="{% url 'resend_verification' %}" class="text-danger">Resend</a></small>
                         </div>
                         {% endif %}
+                        
                     </div>
                 </div>
             </div>
