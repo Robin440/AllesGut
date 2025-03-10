@@ -20,22 +20,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-# In your main urls.py file
-from django.conf.urls import handler404,handler500
-from django.shortcuts import render
+# # In your main urls.py file
+# from django.conf.urls import handler404,handler500
+# from django.shortcuts import render
 
-def custom_404_view(request, exception):
-    return render(request, '404.html', status=404)
+# def custom_404_view(request, exception):
+#     return render(request, '404.html', status=404)
 
-def custom_500_view(request):
-    return render(request, '500.html', status=500)
+# def custom_500_view(request):
+#     return render(request, '500.html', status=500)
     
 
-# Use the custom 404 view
-handler404 = 'core.urls.custom_404_view'
+# # Use the custom 404 view
+# handler404 = 'core.urls.custom_404_view'
 
-# Use the custom 404 view
-handler500 = 'core.urls.custom_500_view'
+# # Use the custom 404 view
+# handler500 = 'core.urls.custom_500_view'
 
 
 

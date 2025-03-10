@@ -24,7 +24,7 @@ load_dotenv()  # This loads the variables from .env into the environment
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback_secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True    
+DEBUG = True 
 
 ALLOWED_HOSTS = ['e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free.app','127.0.0.1','localhost','e123-2401-4900-1f28-54f0-7e5d-5cae-dd8b-58f5.ngrok-free']
 
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.Custom404Middlewares.Custom404Middleware'
 ]
 
 ROOT_URLCONF = 'core.urls'
